@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_bin1/screens/analytics/analytics_page.dart';
 import '../../services/auth_service.dart';
 import '../landing/landing_page.dart';
 
@@ -73,6 +74,7 @@ class DashboardPage extends StatelessWidget {
               "title": "Analytics",
               "icon": Icons.analytics,
               "color": Colors.purple,
+              "page": const AnalyticsPage(),
             },
             {
               "title": "Schedule",
@@ -190,12 +192,12 @@ class DashboardPage extends StatelessWidget {
             ),
             actions: [
               IconButton(
-                icon: Icon(Icons.logout, color: Colors.white),
+                icon: const Icon(Icons.logout, color: Colors.white),
                 onPressed: () {
                   Provider.of<AuthService>(context, listen: false).logout();
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => LandingPage()),
+                    MaterialPageRoute(builder: (context) => const LandingPage()),
                   );
                 },
               ),
@@ -220,7 +222,7 @@ class DashboardPage extends StatelessWidget {
                   SizedBox(height: screenSize.height * 0.02),
                   GridView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: screenSize.width < 600 ? 3 : 4,
                       crossAxisSpacing: 15,
@@ -236,7 +238,7 @@ class DashboardPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: Container(
-                          padding: EdgeInsets.all(15),
+                          padding: const EdgeInsets.all(15),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.topLeft,
@@ -256,7 +258,7 @@ class DashboardPage extends StatelessWidget {
                                 size: screenSize.width * 0.08,
                                 color: metric['color'] as Color,
                               ),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               Text(
                                 metric['value'] as String,
                                 style: TextStyle(
@@ -266,7 +268,7 @@ class DashboardPage extends StatelessWidget {
                                   color: metric['color'] as Color,
                                 ),
                               ),
-                              SizedBox(height: 5),
+                              const SizedBox(height: 5),
                               Text(
                                 metric['title'] as String,
                                 textAlign: TextAlign.center,
@@ -291,7 +293,7 @@ class DashboardPage extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                           color: Colors.black12,
                           blurRadius: 15,
@@ -312,7 +314,7 @@ class DashboardPage extends StatelessWidget {
                         SizedBox(height: screenSize.height * 0.02),
                         GridView.builder(
                           shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: screenSize.width < 600 ? 2 : 4,
@@ -325,7 +327,14 @@ class DashboardPage extends StatelessWidget {
                             final action = quickActions[index];
                             return ElevatedButton.icon(
                               onPressed: () {
-                                // Add action functionality here
+                                if (action.containsKey('page')) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => action['page'],
+                                    ),
+                                  );
+                                }
                               },
                               icon: Icon(
                                 action['icon'] as IconData,
@@ -365,7 +374,7 @@ class DashboardPage extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                           color: Colors.black12,
                           blurRadius: 15,
@@ -378,8 +387,8 @@ class DashboardPage extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.warning, color: Colors.orange),
-                            SizedBox(width: 10),
+                            const Icon(Icons.warning, color: Colors.orange),
+                            const SizedBox(width: 10),
                             Text(
                               "Recent Alerts",
                               style: TextStyle(
@@ -393,7 +402,7 @@ class DashboardPage extends StatelessWidget {
                         SizedBox(height: screenSize.height * 0.02),
                         ...alerts.map((alert) {
                           return Card(
-                            margin: EdgeInsets.only(bottom: 10),
+                            margin: const EdgeInsets.only(bottom: 10),
                             color: _getAlertColor(alert['priority'] as String),
                             child: ListTile(
                               leading: Icon(
