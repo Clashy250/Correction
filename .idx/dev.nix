@@ -3,6 +3,11 @@
   packages = [
     pkgs.jdk17
     pkgs.unzip
+    pkgs.cmake
+    pkgs.clang
+    pkgs.ninja
+    pkgs.pkg-config
+    pkgs.gtk3
   ];
   idx.extensions = [
     

@@ -1,24 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_bin1/models/thingspeak_feed.dart';
 import 'package:smart_bin1/screens/analytics/analytics_page.dart';
 import 'package:smart_bin1/screens/view_all_bins/view_all_bins_page.dart';
+import 'package:smart_bin1/services/thingspeak_service.dart';
 import '../../services/auth_service.dart';
 import '../landing/landing_page.dart';
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
   final String userName;
   final String email;
 
   const DashboardPage({super.key, required this.userName, required this.email});
 
   @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  late Future<List<ThingSpeakFeed>> _feeds;
+
+  @override
+  void initState() {
+    super.initState();
+    _feeds = ThingSpeakService().fetchFeeds();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final isAdmin = email == 'admin@smartbin.com';
+    final isAdmin = widget.email == 'admin@smartbin.com';
     final screenSize = MediaQuery.of(context).size;
 
-    final greeting = isAdmin
-        ? "Welcome back, Admin!"
-        : "Good morning, $userName!";
+    final greeting =
+        isAdmin ? "Welcome back, Admin!" : "Good morning, ${widget.userName}!";
 
     // Define metrics with proper typing
     final List<Map<String, dynamic>> metrics = isAdmin
@@ -158,7 +172,7 @@ class DashboardPage extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize:
                                         _getResponsiveFontSize(screenSize) *
-                                        1.2,
+                                            1.2,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   ),
@@ -169,7 +183,7 @@ class DashboardPage extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize:
                                         _getResponsiveFontSize(screenSize) *
-                                        0.8,
+                                            0.8,
                                     color: Colors.white.withOpacity(0.9),
                                   ),
                                 ),
@@ -199,7 +213,8 @@ class DashboardPage extends StatelessWidget {
                   Provider.of<AuthService>(context, listen: false).logout();
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const LandingPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const LandingPage()),
                   );
                 },
               ),
@@ -319,11 +334,11 @@ class DashboardPage extends StatelessWidget {
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: screenSize.width < 600 ? 2 : 4,
-                                crossAxisSpacing: 15,
-                                mainAxisSpacing: 15,
-                                childAspectRatio: 2.5,
-                              ),
+                            crossAxisCount: screenSize.width < 600 ? 2 : 4,
+                            crossAxisSpacing: 15,
+                            mainAxisSpacing: 15,
+                            childAspectRatio: 2.5,
+                          ),
                           itemCount: quickActions.length,
                           itemBuilder: (context, index) {
                             final action = quickActions[index];

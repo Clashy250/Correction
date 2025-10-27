@@ -14,7 +14,7 @@
           return ThingSpeakFeed(
             entryId: json['entry_id'],
             createdAt: DateTime.parse(json['created_at']),
-            fieldValue: double.tryParse(json['field1'] ?? '0.0') ?? 0.0,
+            fieldValue: double.tryParse(json['field2'] ?? '0.0') ?? 0.0,
           );
         }
       }
