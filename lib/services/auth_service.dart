@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_model.dart';
@@ -34,11 +35,13 @@ class AuthService with ChangeNotifier {
         token: 'mock_jwt_token',
       );
     } else {
+      _isLoading = false;
+      notifyListeners();
       throw Exception('Invalid credentials');
     }
 
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('user', _user!.toJson().toString());
+    await prefs.setString('user', json.encode(_user!.toJson()));
 
     _isLoading = false;
     notifyListeners();
@@ -56,22 +59,11 @@ class AuthService with ChangeNotifier {
     final userString = prefs.getString('user');
 
     if (userString != null) {
-      if (userString.contains('admin@smartbin.com')) {
-        _user = User(
-          id: '1',
-          username: 'Admin User',
-          email: 'admin@smartbin.com',
-          role: 'admin',
-          token: 'mock_jwt_token',
-        );
-      } else if (userString.contains('user@smartbin.com')) {
-        _user = User(
-          id: '2',
-          username: 'Regular User',
-          email: 'user@smartbin.com',
-          role: 'user',
-          token: 'mock_jwt_token',
-        );
+      try {
+        _user = User.fromJson(json.decode(userString));
+      } catch (e) {
+        // Handle potential parsing errors, e.g., by logging out
+        await logout();
       }
     }
 

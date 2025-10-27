@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:smart_bin1/models/thingspeak_feed.dart';
 import 'package:smart_bin1/services/thingspeak_service.dart';
+import 'package:intl/intl.dart';
 
 class AnalyticsPage extends StatefulWidget {
   const AnalyticsPage({super.key});
@@ -37,11 +38,12 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Text(
-                    'Waste Level Over Time',
+                    'IOT-BASED SMART WASTE BIN FOR NM-AIST',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
                   SizedBox(
@@ -56,15 +58,31 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                                 feed.fieldValue,
                               );
                             }).toList(),
-                            isCurved: true,
-                            color: Colors.blue,
-                            barWidth: 3,
+                            isCurved: false,
+                            color: Colors.red,
+                            barWidth: 2,
                             belowBarData: BarAreaData(show: false),
                           ),
                         ],
                         titlesData: FlTitlesData(
-                          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true)),
-                          bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: true, reservedSize: 40),
+                            axisNameWidget: const Text('filling level'),
+                          ),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 30,
+                              getTitlesWidget: (value, meta) {
+                                final dt = DateTime.fromMillisecondsSinceEpoch(value.toInt());
+                                return SideTitleWidget(
+                                  axisSide: meta.axisSide,
+                                  child: Text(DateFormat('HH:mm').format(dt)),
+                                );
+                              },
+                            ),
+                            axisNameWidget: const Text('Date'),
+                          ),
                           topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
                           rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
                         ),
@@ -75,6 +93,8 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                             width: 1,
                           ),
                         ),
+                        minY: 0,
+                        maxY: 100,
                       ),
                     ),
                   ),

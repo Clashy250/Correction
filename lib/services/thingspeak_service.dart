@@ -18,4 +18,16 @@ class ThingSpeakService {
       throw Exception('Failed to load ThingSpeak data');
     }
   }
+
+  Future<List<ThingSpeakFeed>> fetchFeeds() async {
+    final response = await http.get(Uri.parse('$_baseUrl?api_key=$_apiKey'));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final feeds = data['feeds'] as List;
+      return feeds.map((feed) => ThingSpeakFeed.fromJson(feed)).toList();
+    } else {
+      throw Exception('Failed to load ThingSpeak data');
+    }
+  }
 }

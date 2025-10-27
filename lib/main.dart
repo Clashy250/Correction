@@ -4,7 +4,8 @@ import 'services/auth_service.dart';
 import 'screens/landing/landing_page.dart';
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
             secondary: Colors.orange,
             surface: Colors.white,
           ),
-          appBarTheme: AppBarTheme(
+          appBarTheme: const AppBarTheme(
             backgroundColor: Colors.teal,
             foregroundColor: Colors.white,
           ),
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: LandingPage(),
+        home: const LandingPage(),
         debugShowCheckedModeBanner: false,
       ),
     );

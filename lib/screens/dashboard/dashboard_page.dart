@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_bin1/screens/analytics/analytics_page.dart';
+import 'package:smart_bin1/screens/view_all_bins/view_all_bins_page.dart';
 import '../../services/auth_service.dart';
 import '../landing/landing_page.dart';
 
@@ -69,6 +70,7 @@ class DashboardPage extends StatelessWidget {
               "title": "View All Bins",
               "icon": Icons.view_list,
               "color": Colors.blue,
+              "page": const ViewAllBinsPage(),
             },
             {
               "title": "Analytics",
